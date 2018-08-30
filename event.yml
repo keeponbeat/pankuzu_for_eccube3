@@ -1,0 +1,2 @@
+admin.content.page.delete.complete:
+    - [onAdminContentPageDeleteComplete, NORMAL]

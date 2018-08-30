@@ -1,0 +1,80 @@
+{#
+  This file is part of the Pankuzu plugin
+
+  Copyright (C) 2017 MURAKAMI INTERNATIONAL LLC. All Rights Reserved.
+
+  Website: http://murakami-international.co.jp
+  E-Mail: info@murakami-international.co.jp
+
+  For the full copyright and license information, please view the LICENSE
+  file that was distributed with this source code.
+#}
+
+
+
+{% if PageLayout.id == 2 %}  {# 商品リストページ（カテゴリページ）の場合 #}
+
+    <div id="topicpath" class="row">
+        {% if Category is empty %}
+            <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">全商品</span></li>
+            </ol>
+        {% else %}
+            <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}"><span itemprop="name">全商品</span></a></li>
+                {% for CatItem in Category.path %}
+                    {% if loop.last %}
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">{{ CatItem.getName }}</span></li>
+                    {% else %}
+                        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}?category_id={{CatItem.getId}}"><span itemprop="name">{{ CatItem.getName }}</span></a></li>
+                    {% endif %}
+                {% endfor %}
+            </ol>
+        {% endif %}
+    </div>
+
+{% elseif PageLayout.id == 3 %}  {# 商品詳細ページの場合 #}
+
+	{% if DisplayMode == 'one' %}
+
+	<div id="topicpath" class="row">
+        <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}"><span itemprop="name">全商品</span></a></li>
+            {% for CategoryPath in Category.path %}
+            	<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}?category_id={{CategoryPath.getId}}"><span itemprop="name">{{ CategoryPath.getName }}</span></a></li>
+            {% endfor %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">{{ Product.getName }}</span></li>
+        </ol>
+    </div>
+
+	{% elseif DisplayMode == 'all' %}
+
+    <div id="topicpath" class="row">
+        {% for ProductCategory in Product.ProductCategories %}
+        <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}"><span itemprop="name">全商品</span></a></li>
+            {% for CategoryPath in ProductCategory.Category.path %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url('product_list') }}?category_id={{CategoryPath.getId}}"><span itemprop="name">{{ CategoryPath.getName }}</span></a></li>
+            {% endfor %}
+            <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">{{ Product.getName }}</span></li>
+        </ol>
+        {% endfor %}
+    </div>
+
+    {% endif %}
+
+{% else %}  {# その他のページの場合 #}
+
+    <div id="topicpath" class="row">
+        <ol itemscope itemtype="http://schema.org/BreadcrumbList">
+            {% for Page in PageArray %}
+                {% if loop.last %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><span itemprop="name">{{ Page.getName }}</span></li>
+                {% else %}
+                    <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{ url(Page.getUrl) }}"><span itemprop="name">{{ Page.getName }}</span></a></li>
+                {% endif %}
+            {% endfor %}
+        </ol>
+    </div>
+
+{% endif %}

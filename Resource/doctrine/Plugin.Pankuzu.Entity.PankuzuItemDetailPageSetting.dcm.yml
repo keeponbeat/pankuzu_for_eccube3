@@ -1,0 +1,19 @@
+Plugin\Pankuzu\Entity\PankuzuItemDetailPageSetting:
+  type: entity
+  table: plg_pankuzu_item_detail_page_setting
+  repositoryClass: Plugin\Pankuzu\Repository\PankuzuItemDetailPageSettingRepository
+  id:
+    id:
+      type: integer
+      nullable: false
+      options:
+        unsigned: false
+      id: true
+      column: id
+      generator:
+        strategy: NONE
+  fields:
+    mode:
+      type: text
+      nullable: false
+  lifecycleCallbacks: {  }

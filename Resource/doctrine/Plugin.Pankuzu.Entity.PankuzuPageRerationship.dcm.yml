@@ -1,0 +1,25 @@
+Plugin\Pankuzu\Entity\PankuzuPageRerationship:
+  type: entity
+  table: plg_pankuzu_page_rerationship
+  repositoryClass: Plugin\Pankuzu\Repository\PankuzuPageRerationshipRepository
+  id:
+    id:
+      type: integer
+      nullable: false
+      options:
+        unsigned: false
+      id: true
+      column: id
+      generator:
+        strategy: NONE
+  fields:
+    parent_page_id:
+      type: integer
+      nullable: true
+  oneToOne:
+    PageLayout:
+      targetEntity: Eccube\Entity\PageLayout
+      joinColumn:
+        name: page_layout_id
+        referencedColumnName: page_id
+  lifecycleCallbacks: {  }

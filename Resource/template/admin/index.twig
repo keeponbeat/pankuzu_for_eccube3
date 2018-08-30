@@ -1,0 +1,109 @@
+{#
+  This file is part of the Pankuzu plugin
+
+  Copyright (C) 2017 MURAKAMI INTERNATIONAL LLC. All Rights Reserved.
+
+  Website: http://murakami-international.co.jp
+  E-Mail: info@murakami-international.co.jp
+
+  For the full copyright and license information, please view the LICENSE
+  file that was distributed with this source code.
+#}
+
+
+
+{% extends 'default_frame.twig' %}
+
+{% set menus = ['content', 'pankuzu'] %}
+
+{% block title %}コンテンツ管理{% endblock %}
+{% block sub_title %}ぱんクズ管理{% endblock %}
+
+{% block main %}
+<div id="page_wrap" class="container-fluid">
+    <div id="page_list" class="row">
+
+    {{ form_start(form) }}
+
+        <div id="page_list_box" class="col-md-12">
+            <div id="page_list__body" class="box">
+
+                <div id="sortable_list_box" class="box-body no-padding no-border">
+                    <div id="sortable_list_box__list" class="sortable_list">
+                        <div class="tableish">
+                            <div class="item_box tr" style="background-color: #DDD;">
+                            	<div class="item_pattern td"><strong>商品詳細ページぱんクズリスト表示方法</strong></div>
+                            </div>
+                            <div class="item_box tr">
+                            	<div class="td">
+                            		<div><strong>カテゴリIDが最も大きいもの</strong> - 商品が属するカテゴリの中で最もカテゴリIDが大きいものについて、ぱんクズリストを表示します。（一行）</div>
+									<div><strong>全所属カテゴリ</strong> - 商品が属する全てのカテゴリについて、ぱんクズリストを表示します。（複数行）</div>
+								</div>
+							</div>
+							<div id="item_detail_page_pankuzu_display_setting_tr" class="item_box tr">
+                            	<div id="item_detail_page_pankuzu_display_setting_td" class="td">
+                            	 	{{ form_errors(form['item_detail_page_pankuzu_setting']) }}
+                            	 	{{ form_widget(form['item_detail_page_pankuzu_setting']) }}
+                                </div>
+                            </div><!-- /tr -->
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+
+
+                <div id="sortable_list_box" class="box-body no-padding no-border">
+                    <div id="sortable_list_box__list" class="sortable_list">
+                        <div class="tableish">
+                            <div class="item_box tr" style="background-color: #DDD;">
+                       			<div class="item_pattern td"><strong>ページ親子関係設定</strong></div>
+                    		</div>
+                    		<div class="item_box tr">
+                            	<div class="td">
+									<div>商品一覧ページ、商品詳細ページの場合は、カテゴリ名、商品名から親カテゴリをたどって、ぱんクズリストを生成しますが、<br />通常ページの場合は、以下の親ページ設定を元に親ページをたどって、ぱんクズリストを生成します。</div>
+									<div>設定方法：トップページは親ページを持ちません。その他のページは、親ページとしてトップページのIDもしくは他のページIDを設定してください。</div>
+								</div>
+							</div>
+						</div>
+                        <div class="tableish">
+                            <div class="item_box tr" style="background-color: #F9F9F9;">
+                            	<div class="item_pattern td"><strong>ページID</strong></div>
+                                <div class="item_pattern td"><strong>親ページID</strong></div>
+                                <div class="item_pattern td"><strong>ページ名</strong></div>
+                            </div>
+                            {% for PankuzuPageRerationship in PankuzuPageRerationships %}
+                                {% if PankuzuPageRerationship.getPageLayout.getId == 2 or PankuzuPageRerationship.getPageLayout.getId == 3 %}
+                                {% else %}
+                                <div id="sortable_list_box__item--{{ PankuzuPageRerationship.getPageLayout.id }}" class="item_box tr">
+                                    <div id="sortable_list_box__id--{{ PankuzuPageRerationship.getPageLayout.id }}" class="item_pattern td">
+                                        {{ PankuzuPageRerationship.getPageLayout.id }}
+                                    </div>
+                                    <div id="sortable_list_box__parent_id--{{ PankuzuPageRerationship.getPageLayout.id }}" class="td">
+                                        {% if PankuzuPageRerationship.getId == 1 %}
+                                            -
+                                        {% else %}
+                                            {{ form_errors(form[PankuzuPageRerationship.getId]) }}
+                                            {{ form_widget(form[PankuzuPageRerationship.getId]) }}
+                                        {% endif %}
+                                    </div>
+                                    <div id="sortable_list_box__name--{{ PankuzuPageRerationship.getPageLayout.id }}" class="td">
+                                        {{ PankuzuPageRerationship.getPageLayout.name }}
+                                    </div>
+                                </div><!-- /.item_box -->
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div><!-- /.box -->
+            <!-- ▲ データがある時 ▲ -->
+        </div><!-- /.col -->
+
+        <div id="page_list__footer" class="row btn_area2">
+            <div id="page_list__insert_button" class="col-xs-10 col-xs-offset-1 col-sm-6 col-sm-offset-3 text-center">
+                <button type="submit" class="btn btn-primary btn-block btn-lg">情報更新</button>
+            </div>
+        </div>
+    {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}
